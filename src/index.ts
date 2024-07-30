@@ -39,10 +39,11 @@ export interface FlashbotsBundleTransaction {
 }
 
 export interface FlashbotsOptions {
-  minTimestamp?: number
-  maxTimestamp?: number
-  revertingTxHashes?: Array<string>
-  replacementUuid?: string
+  minTimestamp?: number;
+  maxTimestamp?: number;
+  revertingTxHashes?: Array<string>;
+  replacementUuid?: string;
+  builders?: Array<string>;
 }
 
 export interface TransactionAccountNonce {
@@ -376,7 +377,8 @@ export class FlashbotsBundleProvider extends providers.JsonRpcProvider {
       minTimestamp: opts?.minTimestamp,
       maxTimestamp: opts?.maxTimestamp,
       revertingTxHashes: opts?.revertingTxHashes,
-      replacementUuid: opts?.replacementUuid
+      replacementUuid: opts?.replacementUuid,
+      builders: opts?.builders,
     }
 
     const request = JSON.stringify(this.prepareRelayRequest('eth_sendBundle', [params]))
@@ -476,6 +478,7 @@ export class FlashbotsBundleProvider extends providers.JsonRpcProvider {
     opts?: {
       maxBlockNumber?: number
       simulationTimestamp?: number
+      builders?: Array<string>
     }
   ): Promise<FlashbotsPrivateTransaction> {
     const startBlockNumberPromise = this.genericProvider.getBlockNumber()
@@ -489,7 +492,8 @@ export class FlashbotsBundleProvider extends providers.JsonRpcProvider {
 
     const params = {
       tx: signedTransaction,
-      maxBlockNumber: opts?.maxBlockNumber
+      maxBlockNumber: opts?.maxBlockNumber,
+      builders: opts?.builders,
     }
     const request = JSON.stringify(this.prepareRelayRequest('eth_sendPrivateTransaction', [params]))
     const response = await this.request(request)

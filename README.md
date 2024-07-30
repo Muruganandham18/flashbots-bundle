@@ -1,4 +1,6 @@
-# ethers-provider-flashbots-bundle
+# flashbots-bundle forked from [@flashbots/ethers-provider-flashbots-bundle](https://github.com/flashbots/ethers-provider-flashbots-bundle)
+
+**Added Functionality to add Builder as optional paramaeter for sendRawBundle and sendPrivateTransaction.**
 
 This repository contains the `FlashbotsBundleProvider` ethers.js provider, an additional `Provider` to `ethers.js` to enable high-level access to `eth_sendBundle` and `eth_callBundle` rpc endpoint on [mev-relay](https://github.com/flashbots/mev-relay-js). **`mev-relay` is a hosted service; it is not necessary to run `mev-relay` or `mev-geth` to proceed with this example.**
 
@@ -14,14 +16,14 @@ Install ethers.js and the Flashbots ethers bundle provider.
 
 ```bash
 npm install --save ethers
-npm install --save @flashbots/ethers-provider-bundle
+npm install --save @san-utils/flashbots-bundle
 ```
 
 Open up a new TypeScript file (this also works with JavaScript if you prefer)
 
 ```ts
 import { providers, Wallet } from "ethers";
-import { FlashbotsBundleProvider } from "@flashbots/ethers-provider-bundle";
+import { FlashbotsBundleProvider } from "@san-utils/flashbots-bundle";
 
 // Standard json rpc provider directly from ethers.js (NOT Flashbots)
 const provider = new providers.JsonRpcProvider({ url: ETHEREUM_RPC_URL }, 1)
@@ -117,6 +119,7 @@ Send:
 const flashbotsTransactionResponse = await flashbotsProvider.sendBundle(
   transactionBundle,
   targetBlockNumber,
+	{builders:["flashbots", "beaverbuild.org", "rsync", "Titan"]}
   )
 ```
 
@@ -189,7 +192,7 @@ The Flashbots relay can also return statistics about you as a user (identified s
 
 ## Investigating Losses
 
-When your bundle fails to land in the specified block, there are many reasons why this could have occurred. For a list of reasons, check out [Flashbots Docs : Why didn't my transaction get included?](https://docs.flashbots.net/flashbots-auction/searchers/faq/#why-didnt-my-transaction-get-included). To aid in troubleshooting, this library offers a method that will simulate a bundle in multiple positions to identify the competing bundle that landed on chain (if there was one) and calculate the relevant pricing.
+When your bundle fails to land in the specified block, there are many reasons why this could have occurred. For a list of reasons, check out [Flashbots Docs : Why didn&#39;t my transaction get included?](https://docs.flashbots.net/flashbots-auction/searchers/faq/#why-didnt-my-transaction-get-included). To aid in troubleshooting, this library offers a method that will simulate a bundle in multiple positions to identify the competing bundle that landed on chain (if there was one) and calculate the relevant pricing.
 
 For usage instructions, check out the `demo-research.ts`.
 
